@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 public class Pawn : MonoBehaviour
 {
     [SerializeField] private float _speed;
+    [SerializeField] private GameObject Explosion;
     void Start()
     {
         
@@ -30,6 +31,10 @@ public class Pawn : MonoBehaviour
         if (Input.GetKey(KeyCode.DownArrow))
         {
             GoDown();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            UsePickaxe();
         }
     }
 
@@ -59,16 +64,32 @@ public class Pawn : MonoBehaviour
 
     void UsePickaxe()
     {
-        
+        var _pickaxeExplosionLocation = new Vector3();
+        if (this.transform.eulerAngles == new Vector3(0f, 0f, 0f))
+        {
+            _pickaxeExplosionLocation = new Vector3(Mathf.Round(this.transform.position.x),
+                0.6f, Mathf.Round(this.transform.position.z+1));
+        }
+        else if (this.transform.eulerAngles == new Vector3(0f, 90f, 0f))
+        {
+            _pickaxeExplosionLocation = new Vector3(Mathf.Round(this.transform.position.x+1),
+                0.6f, Mathf.Round(this.transform.position.z));
+        }
+        else if (this.transform.eulerAngles == new Vector3(0f, 180f, 0f))
+        {
+            _pickaxeExplosionLocation = new Vector3(Mathf.Round(this.transform.position.x),
+                0.6f, Mathf.Round(this.transform.position.z-1));
+        }
+        else
+        {
+            _pickaxeExplosionLocation = new Vector3(Mathf.Round(this.transform.position.x-1), 
+                0.6f, Mathf.Round(this.transform.position.z));
+        }
+        Instantiate(Explosion, _pickaxeExplosionLocation, Explosion.transform.rotation);
     }
 
     void UseBomb()
     {
         
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.name);
     }
 }
