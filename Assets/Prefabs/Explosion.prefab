@@ -132,3 +132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719fa6e2a0717a34fbd09fb020d35a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _beer: {fileID: 2560902133394104220, guid: 1be47393144587e4a838202787e21853, type: 3}
+  _gold: {fileID: 3193475651674991260, guid: 12c2b536785a27248b8a9fc36259050f, type: 3}
+  _supplyCrate: {fileID: 4698877887964795873, guid: 1a3b173219dba54488fa80b0e6096afe, type: 3}
