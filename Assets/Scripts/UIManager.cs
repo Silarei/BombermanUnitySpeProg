@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
         _firstDwarfUI.transform.Find("FirstPlayerRange").GetComponent<TMP_Text>().text = "Portée : " + _firstDwarf.Range;
         _firstDwarfUI.transform.Find("FirstPlayerSpeed").GetComponent<TMP_Text>().text = "Vitesse : " + _firstDwarf.Speed * 10;
         _firstDwarfUI.transform.Find("FirstPlayerLife").GetComponent<TMP_Text>().text = "" + _firstDwarf.NumberOfLife;
-        if (_secondDwarf != null)
+        if (!GameObject.Find("GameManager").GetComponent<MainGameManager>().SoloMode)
         {
             _secondDwarfUI.text = "LeRouge";
             _secondDwarfUI.transform.Find("SecondPlayerBomb").GetComponent<TMP_Text>().text = "Bombe : " + _secondDwarf.NumberOfBombs;

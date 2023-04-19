@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,7 +25,7 @@ public class MainGameManager : MonoBehaviour
     void Update()
     {
         CurrentTime += Time.deltaTime;
-        if (CurrentTime > 5 && ((SoloMode && CurrentTime > 60) ||
+        if (CurrentTime > 1 && ((SoloMode && CurrentTime > 60) ||
             (!SoloMode && (!GameObject.Find("FirstDwarf") || !GameObject.Find("SecondDwarf"))) ||
             (SoloMode && !GameObject.Find("FirstDwarf"))))
         {
@@ -54,16 +55,31 @@ public class MainGameManager : MonoBehaviour
 
     private IEnumerator CloseGame()
     {
-        if (!GameObject.Find("FirstDwarf"))
+        
+        if (!GameObject.Find("FirstDwarf") && !SoloMode)
         {
-            
+            Victoire.GetComponent<TMP_Text>().text = "Victoire du Rouge";
+            GameObject.Find("SecondDwarf").transform.position = new Vector3(0f,14.5f,-0.5f);
+            GameObject.Find("SecondDwarf").transform.rotation = new Quaternion(0f,180f,270f,1f).normalized;
+
+        }
+        else if (!SoloMode)
+        {
+            Victoire.GetComponent<TMP_Text>().text = "Victoire du Bleu";
+            GameObject.Find("FirstDwarf").transform.position = new Vector3(0f,14.5f,-0.5f);
+            GameObject.Find("FirstDwarf").transform.rotation = new Quaternion(0f,180f,270f,1f).normalized;
+        }
+        else if (!GameObject.Find("FirstDwarf"))
+        {
+            Victoire.GetComponent<TMP_Text>().text = "Défaite !";
         }
         else
         {
-            GameObject.Find("FirstDwarf").transform.position = new Vector3();
+            
+            Victoire.GetComponent<TMP_Text>().text = "Regarde ton score et essaye de t'améliorer";
         }
 
         yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
     }
 }
