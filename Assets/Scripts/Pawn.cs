@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
@@ -12,74 +13,80 @@ public class Pawn : MonoBehaviour
     [SerializeField] private GameObject _explosion;
     [SerializeField] private GameObject _dynamite;
     [SerializeField] private Vector3 _spawnLocation;
-
+    
     public float Range;
     public float Speed;
     public int NumberOfBombs;
     public int NumberOfLife;
-    public GameObject UIRange;
-    public GameObject UISpeed;
-    public GameObject UIBomb;
-    public GameObject UILife;
+    public int Score;
+
+    public KeyCode KeyRight;
+    public KeyCode KeyLeft;
+    public KeyCode KeyUp;
+    public KeyCode KeyDown;
+    public KeyCode KeyBomb;
+    public KeyCode KeyPickaxe;
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            GoRight();
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            GoLeft();
-        }
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            GoUp();
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            GoDown();
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            UsePickaxe();
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            UseBomb();
+        if (GameObject.Find("GameManager").GetComponent<MainGameManager>().CurrentTime <= 60) {
+            if (Input.GetKey(KeyRight))
+            {
+                GoRight();
+            }
+
+            if (Input.GetKey(KeyLeft))
+            {
+                GoLeft();
+            }
+
+            if (Input.GetKey(KeyUp))
+            {
+                GoUp();
+            }
+
+            if (Input.GetKey(KeyDown))
+            {
+                GoDown();
+            }
+
+            if (Input.GetKeyDown(KeyBomb))
+            {
+                UsePickaxe();
+            }
+
+            if (Input.GetKeyDown(KeyPickaxe))
+            {
+                UseBomb();
+            }
         }
     }
 
-    void UpdateUI()
-    {
-        
-    }
-
-    void GoUp()
+    public void GoUp()
     {
         this.transform.eulerAngles = new Vector3(0f,0f,0f);
         GetComponent<Rigidbody>().position += this.transform.forward * Speed;
     }
     
-    void GoDown()
+    public void GoDown()
     {
         this.transform.eulerAngles = new Vector3(0f,180f,0f);
         GetComponent<Rigidbody>().position += this.transform.forward * Speed;
     }
     
-    void GoRight()
+    public void GoRight()
     {
         this.transform.eulerAngles = new Vector3(0f,90f,0f);
         GetComponent<Rigidbody>().position += this.transform.forward * Speed;
     }
     
-    void GoLeft()
+    public void GoLeft()
     {
         this.transform.eulerAngles = new Vector3(0f,270f,0f);
         GetComponent<Rigidbody>().position += this.transform.forward * Speed;
     }
 
-    void UsePickaxe()
+    public void UsePickaxe()
     {
         var _pickaxeExplosionLocation = new Vector3();
         if (this.transform.eulerAngles == new Vector3(0f, 0f, 0f))
@@ -102,12 +109,12 @@ public class Pawn : MonoBehaviour
             _pickaxeExplosionLocation = new Vector3(Mathf.Round(this.transform.position.x-1), 
                 0.6f, Mathf.Round(this.transform.position.z));
         }
-        Instantiate(_explosion, _pickaxeExplosionLocation, _explosion.transform.rotation);
+        Instantiate(this._explosion, _pickaxeExplosionLocation, this._explosion.transform.rotation);
     }
 
-    void UseBomb()
+    public void UseBomb()
     {
-        if (NumberOfBombs < 1)
+        if (this.NumberOfBombs < 1)
         {
             return;
         }
@@ -160,6 +167,14 @@ public class Pawn : MonoBehaviour
     public void GetHit()
     {
         NumberOfLife--;
-        this.transform.position = _spawnLocation;
+        Score -= 200;
+        if (NumberOfLife != 0)
+        {
+            this.transform.position = this._spawnLocation;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
